@@ -77,14 +77,10 @@ https://github.com/user-attachments/assets/7c20f3c5-21eb-4f37-bf2b-a7959f07ce7f
 │   ├── robot_arm.py    # Main RobotArm class
 │   └── tcp.py          # TCP communication
 ├── Tree/
-├── .gitignore
-├── .python-version
 ├── MoveInCube.py       # Example behavior tree for moving in a cube pattern
 ├── main.py             # Simple hello world script
 ├── pour_wine.py        # Example wine pouring task
-├── pyproject.toml      # Project configuration
-├── README.md           # This file
-└── uv.lock
+└── README.md           # This file
 ```
 
 ## Protocol Reference
