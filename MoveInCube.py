@@ -55,7 +55,7 @@ def create_behavior_tree(ra):
     home = Cartesian(0,0,0,0,0,0)
     home = Cartesian(home.x, home.y, home.z, home.rx, home.ry, home.rz)
     
-    cube_size = 200
+    cube_size = 220
     
     corners = [
         # Move in bottom plane
@@ -79,8 +79,8 @@ def create_behavior_tree(ra):
     
     gripper_open_close_sequence = py_trees.composites.Sequence("GripperSequence", memory=True)
     gripper_open_close_sequence.add_children([
-        MoveGripper(ra, 140, "OpenGripper"),
-        MoveGripper(ra, 100, "CloseGripper")
+        MoveGripper(ra, 130, "OpenGripper"),
+        MoveGripper(ra, 0, "CloseGripper")
     ])
     
     
@@ -95,6 +95,8 @@ def create_behavior_tree(ra):
     # Main sequence
     root = py_trees.composites.Sequence("Main", memory=True)
     root.add_children([
+        MoveGripper(ra, 130, "OpenGripper"),
+        MoveGripper(ra, 0, "CloseGripper"),
         MoveLinear("MoveToStart", ra, home),
         parallel
     ])
@@ -116,3 +118,4 @@ if __name__ == "__main__":
     while True:
         tree.tick()
         print(py_trees.display.unicode_tree(tree.root, show_status=True))
+        time.sleep(0.1)
