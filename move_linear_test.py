@@ -47,17 +47,6 @@ class MoveGripper(py_trees.behaviour.Behaviour):
             self.feedback_message = f"Gripper reached {self.position}"
             return py_trees.common.Status.SUCCESS
 
-class SetKinematicCoordinate(py_trees.behaviour.Behaviour):
-    def __init__(self, robot_arm : RobotArm, target_position : Cartesian, name):
-        super().__init__(name=name)
-        self.ra: RobotArm = robot_arm
-        self.target_position: Cartesian = target_position
-        
-    def update(self):
-        self.ra.set_kinematic_coordinate(self.target_position)
-        self.feedback_message = f"Kinematic coordinate set to {self.target_position}"
-        return py_trees.common.Status.SUCCESS
-
 
 def create_behavior_tree(ra):
     #{'x': -227.483, 'y': -394.018, 'z': 278.261, 'rx': -110.224, 'ry': -90.0, 'rz': 170.224}
@@ -110,7 +99,6 @@ def create_behavior_tree(ra):
     root.add_children([
         MoveLinear("MoveToHome", ra, home),
         MoveLinear("MoveToStart", ra, desired_pos),
-        # SetKinematicCoordinate(name="SetKinematicCoordinate", robot_arm=ra, target_position=corners[0]),
         parallel
     ])
     
