@@ -1,4 +1,4 @@
-from HansRobot_Elfin_robot_arm.robot_arm import *
+from robot_arm import *
 import time
 import atexit
 import py_trees
@@ -17,12 +17,12 @@ class MoveToPosition(py_trees.behaviour.Behaviour):
         
     def update(self):
         if not hasattr(self, 'started'):
-            self.ra.moveJoint(self.position)
+            self.ra.move_joint(self.position)
             self.started = True
             self.feedback_message = f"Moving to {self.name}..."
             return Status.RUNNING
-        
-        if self.ra.isMoving():
+
+        if self.ra.is_moving():
             self.feedback_message = f"Still moving to {self.name}..."
             return Status.RUNNING
         else:
@@ -39,12 +39,12 @@ class MoveGripper(py_trees.behaviour.Behaviour):
         
     def update(self):
         if not hasattr(self, 'started'):
-            self.ra.moveGripper(self.position)
+            self.ra.move_gripper(self.position)
             self.started = True
             self.feedback_message = f"Gripper moving to {self.position}..."
             return Status.RUNNING
-        
-        if self.ra.isGripperMoving():
+
+        if self.ra.is_gripper_moving():
             self.feedback_message = f"Gripper still moving to {self.position}..."
             return Status.RUNNING
         else:
