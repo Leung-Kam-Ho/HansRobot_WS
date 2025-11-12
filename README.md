@@ -63,7 +63,7 @@ https://github.com/user-attachments/assets/2d68cb86-ef7f-4fea-a627-f24f3eff14fd
 
 ***Move In Cube***
 
-![BehaviourTree](/Tree/moveincube_sequence_tree)
+![BehaviourTree](/Tree/moveincube_sequence_tree.png)
 
 https://github.com/user-attachments/assets/7c20f3c5-21eb-4f37-bf2b-a7959f07ce7f
 
