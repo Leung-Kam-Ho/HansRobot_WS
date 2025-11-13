@@ -1,0 +1,29 @@
+digraph pastafarianism {
+ordering=out;
+graph [fontname="times-roman"];
+node [fontname="times-roman"];
+edge [fontname="times-roman"];
+Main [label="Ⓜ Main", shape=box, style=filled, fillcolor=orange, fontsize=9, fontcolor=black];
+"Init Position" [label="Init Position", shape=ellipse, style=filled, fillcolor=gray, fontsize=9, fontcolor=black];
+Main -> "Init Position";
+OpenGripper [label=OpenGripper, shape=ellipse, style=filled, fillcolor=gray, fontsize=9, fontcolor=black];
+Main -> OpenGripper;
+CloseGripper [label=CloseGripper, shape=ellipse, style=filled, fillcolor=gray, fontsize=9, fontcolor=black];
+Main -> CloseGripper;
+"OpenGripper*" [label="OpenGripper*", shape=ellipse, style=filled, fillcolor=gray, fontsize=9, fontcolor=black];
+Main -> "OpenGripper*";
+ParallelActions [label="⚡ ParallelActions\nSuccessOnAll", shape=parallelogram, style=filled, fillcolor=gold, fontsize=9, fontcolor=black];
+Main -> ParallelActions;
+RepeatRectangle [label=RepeatRectangle, shape=ellipse, style=filled, fillcolor=ghostwhite, fontsize=9, fontcolor=black];
+ParallelActions -> RepeatRectangle;
+DrawCubeRelative [label="Ⓜ DrawCubeRelative", shape=box, style=filled, fillcolor=orange, fontsize=9, fontcolor=black];
+RepeatRectangle -> DrawCubeRelative;
+RelMove1 [label=RelMove1, shape=ellipse, style=filled, fillcolor=gray, fontsize=9, fontcolor=black];
+DrawCubeRelative -> RelMove1;
+RelMove2 [label=RelMove2, shape=ellipse, style=filled, fillcolor=gray, fontsize=9, fontcolor=black];
+DrawCubeRelative -> RelMove2;
+RelMove3 [label=RelMove3, shape=ellipse, style=filled, fillcolor=gray, fontsize=9, fontcolor=black];
+DrawCubeRelative -> RelMove3;
+RelMove4 [label=RelMove4, shape=ellipse, style=filled, fillcolor=gray, fontsize=9, fontcolor=black];
+DrawCubeRelative -> RelMove4;
+}

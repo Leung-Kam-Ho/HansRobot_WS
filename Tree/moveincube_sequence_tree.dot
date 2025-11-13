@@ -4,6 +4,10 @@ graph [fontname="times-roman"];
 node [fontname="times-roman"];
 edge [fontname="times-roman"];
 Main [label="Ⓜ Main", shape=box, style=filled, fillcolor=orange, fontsize=9, fontcolor=black];
+OpenGripper [label=OpenGripper, shape=ellipse, style=filled, fillcolor=gray, fontsize=9, fontcolor=black];
+Main -> OpenGripper;
+CloseGripper [label=CloseGripper, shape=ellipse, style=filled, fillcolor=gray, fontsize=9, fontcolor=black];
+Main -> CloseGripper;
 MoveToStart [label=MoveToStart, shape=ellipse, style=filled, fillcolor=gray, fontsize=9, fontcolor=black];
 Main -> MoveToStart;
 ParallelActions [label="⚡ ParallelActions\nSuccessOnAll", shape=parallelogram, style=filled, fillcolor=gold, fontsize=9, fontcolor=black];
@@ -36,8 +40,8 @@ RepeatGripper [label=RepeatGripper, shape=ellipse, style=filled, fillcolor=ghost
 ParallelActions -> RepeatGripper;
 GripperSequence [label="Ⓜ GripperSequence", shape=box, style=filled, fillcolor=orange, fontsize=9, fontcolor=black];
 RepeatGripper -> GripperSequence;
-OpenGripper [label=OpenGripper, shape=ellipse, style=filled, fillcolor=gray, fontsize=9, fontcolor=black];
-GripperSequence -> OpenGripper;
-CloseGripper [label=CloseGripper, shape=ellipse, style=filled, fillcolor=gray, fontsize=9, fontcolor=black];
-GripperSequence -> CloseGripper;
+"OpenGripper*" [label="OpenGripper*", shape=ellipse, style=filled, fillcolor=gray, fontsize=9, fontcolor=black];
+GripperSequence -> "OpenGripper*";
+"CloseGripper*" [label="CloseGripper*", shape=ellipse, style=filled, fillcolor=gray, fontsize=9, fontcolor=black];
+GripperSequence -> "CloseGripper*";
 }
