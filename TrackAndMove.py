@@ -6,7 +6,6 @@ from py_trees.common import Status
 from robot_arm.robot_arm import RobotArm
 from robot_arm.position import Cartesian
 import time
-from MoveInCube import MoveLinear
 
 
 class PositionInfo(BaseModel):
@@ -177,28 +176,30 @@ class MoveBasedOnPosition(py_trees.behaviour.Behaviour):
         if position == "left":
             # Move right (positive x)
             delta = Cartesian(100, 0, 0, 0, 0, 0)
+            current_pos = ra.read_cartesian_pos()
             ra.move_linear(
                 Cartesian(
-                    ra.read_cartesian_pos().x + delta.x,
-                    ra.read_cartesian_pos().y + delta.y,
-                    ra.read_cartesian_pos().z + delta.z,
-                    ra.read_cartesian_pos().rx + delta.rx,
-                    ra.read_cartesian_pos().ry + delta.ry,
-                    ra.read_cartesian_pos().rz + delta.rz,
+                    current_pos.x + delta.x,
+                    current_pos.y + delta.y,
+                    current_pos.z + delta.z,
+                    current_pos.rx + delta.rx,
+                    current_pos.ry + delta.ry,
+                    current_pos.rz + delta.rz,
                 )
             )
             self.feedback_message = "Moving right due to bottle on left"
         elif position == "right":
             # Move left (negative x)
             delta = Cartesian(-100, 0, 0, 0, 0, 0)
+            current_pos = ra.read_cartesian_pos()
             ra.move_linear(
                 Cartesian(
-                    ra.read_cartesian_pos().x + delta.x,
-                    ra.read_cartesian_pos().y + delta.y,
-                    ra.read_cartesian_pos().z + delta.z,
-                    ra.read_cartesian_pos().rx + delta.rx,
-                    ra.read_cartesian_pos().ry + delta.ry,
-                    ra.read_cartesian_pos().rz + delta.rz,
+                    current_pos.x + delta.x,
+                    current_pos.y + delta.y,
+                    current_pos.z + delta.z,
+                    current_pos.rx + delta.rx,
+                    current_pos.ry + delta.ry,
+                    current_pos.rz + delta.rz,
                 )
             )
             self.feedback_message = "Moving left due to bottle on right"
