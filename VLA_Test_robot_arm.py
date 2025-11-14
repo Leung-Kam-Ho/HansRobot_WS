@@ -8,6 +8,7 @@ class PositionInfo(BaseModel):
     # return the move direction based on bottle position
     position: str = Field(..., pattern="^(|left|right|center)$")
 
+
 # Blackboard keys
 class BB:
     FRAME = "frame"
@@ -15,6 +16,7 @@ class BB:
     POSITION = "position"
     CAP = "cap"
     MODEL = "model"
+
 
 class InitializeCamera(py_trees.behaviour.Behaviour):
     def __init__(self, name="Initialize Camera"):
@@ -33,6 +35,7 @@ class InitializeCamera(py_trees.behaviour.Behaviour):
             return Status.SUCCESS
         return Status.FAILURE
 
+
 class InitializeModel(py_trees.behaviour.Behaviour):
     def __init__(self, name="Initialize Model"):
         super().__init__(name)
@@ -45,6 +48,7 @@ class InitializeModel(py_trees.behaviour.Behaviour):
         model = lms.llm("internvl3_5-2b")
         self.blackboard.set(BB.MODEL, model)
         return Status.SUCCESS
+
 
 class CaptureFrame(py_trees.behaviour.Behaviour):
     def __init__(self, name="Capture Frame"):
@@ -69,6 +73,7 @@ class CaptureFrame(py_trees.behaviour.Behaviour):
         self.blackboard.set(BB.FRAME_COUNT, frame_count)
         return Status.SUCCESS
 
+
 class DrawGrid(py_trees.behaviour.Behaviour):
     def __init__(self, name="Draw Grid"):
         super().__init__(name)
@@ -87,6 +92,7 @@ class DrawGrid(py_trees.behaviour.Behaviour):
         self.blackboard.set(BB.FRAME, frame)
         return Status.SUCCESS
 
+
 class CheckFrameInterval(py_trees.behaviour.Behaviour):
     def __init__(self, interval=30, name="Check Frame Interval"):
         super().__init__(name)
@@ -101,6 +107,7 @@ class CheckFrameInterval(py_trees.behaviour.Behaviour):
         if frame_count % self.interval == 0:
             return Status.SUCCESS
         return Status.FAILURE
+
 
 class DetectBottlePosition(py_trees.behaviour.Behaviour):
     def __init__(self, name="Detect Bottle Position"):
@@ -135,6 +142,7 @@ class DetectBottlePosition(py_trees.behaviour.Behaviour):
         self.blackboard.set(BB.POSITION, result.parsed.get("position"))
         return Status.SUCCESS
 
+
 class DisplayFrame(py_trees.behaviour.Behaviour):
     def __init__(self, name="Display Frame"):
         super().__init__(name)
@@ -150,6 +158,7 @@ class DisplayFrame(py_trees.behaviour.Behaviour):
         if cv2.waitKey(1) & 0xFF == ord('q'):
             return Status.FAILURE
         return Status.SUCCESS
+
 
 def create_tree():
     # Initialize nodes
@@ -207,6 +216,7 @@ def create_tree():
         ]
     )
     return root
+
 
 if __name__ == "__main__":
     tree = create_tree()

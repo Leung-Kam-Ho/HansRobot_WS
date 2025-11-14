@@ -171,7 +171,7 @@ if __name__ == "__main__":
 
     tree = create_behavior_tree(ra)
 
-    py_trees.display.render_dot_tree(tree.root, target_directory=Path() / "Tree", name="moveInCube_relative_tree")
+    py_trees.display.render_dot_tree(tree.root, target_directory= Path() / "Tree", name="moveInCube_relative_tree")
     tree.setup(timeout=15)
 
     while True:
