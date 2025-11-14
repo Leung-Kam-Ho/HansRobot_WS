@@ -22,6 +22,7 @@ class BB:
     CAP = "cap"
     MODEL = "model"
     ROBOT_ARM = "robot_arm"
+    CLIENT = "client"
 
 
 class InitializeCamera(py_trees.behaviour.Behaviour):
@@ -36,7 +37,7 @@ class InitializeCamera(py_trees.behaviour.Behaviour):
         )
 
     def update(self):
-        cap = cv2.VideoCapture("bottle.MOV")
+        cap = cv2.VideoCapture(0)
         if cap.isOpened():
             self.blackboard.set(BB.CAP, cap)
             self.blackboard.set(BB.FRAME_COUNT, 0)
@@ -51,9 +52,12 @@ class InitializeModel(py_trees.behaviour.Behaviour):
     def setup(self, **kwargs):
         self.blackboard = self.attach_blackboard_client()
         self.blackboard.register_key(BB.MODEL, access=py_trees.common.Access.WRITE)
+        self.blackboard.register_key(BB.CLIENT, access=py_trees.common.Access.WRITE)
 
     def update(self):
-        model = lms.llm("internvl3_5-2b")
+        client = lms.Client("lablab.local:1234")
+        self.blackboard.set(BB.CLIENT, client)
+        model = client.llm.model("internvl3_5-2b")
         self.blackboard.set(BB.MODEL, model)
         return Status.SUCCESS
 
@@ -108,7 +112,11 @@ class CaptureFrame(py_trees.behaviour.Behaviour):
         if not ret:
             return Status.FAILURE
 
-        frame = cv2.resize(frame, (640, 480))
+        # frame = cv2.resize(frame, (640, 480))
+        # draw two lines to divide the frame into three vertical sections
+        height, width, _ = frame.shape
+        cv2.line(frame, (width // 3, 0), (width // 3, height), (0, 255, 0), 2)
+        cv2.line(frame, (2 * width // 3, 0), (2 * width // 3, height), (0, 255, 0), 2)
         frame_count = self.blackboard.get(BB.FRAME_COUNT) + 1
         self.blackboard.set(BB.FRAME, frame)
         self.blackboard.set(BB.FRAME_COUNT, frame_count)
@@ -124,10 +132,12 @@ class DetectBottlePosition(py_trees.behaviour.Behaviour):
         self.blackboard.register_key(BB.FRAME, access=py_trees.common.Access.READ)
         self.blackboard.register_key(BB.MODEL, access=py_trees.common.Access.READ)
         self.blackboard.register_key(BB.POSITION, access=py_trees.common.Access.WRITE)
+        self.blackboard.register_key(BB.CLIENT, access=py_trees.common.Access.READ)
 
     def update(self):
         frame = self.blackboard.get(BB.FRAME)
         model = self.blackboard.get(BB.MODEL)
+        client = self.blackboard.get(BB.CLIENT)
 
         cv2.imwrite("input.jpg", frame.copy())
 
@@ -137,9 +147,11 @@ class DetectBottlePosition(py_trees.behaviour.Behaviour):
 
         location of the bottle horizontally is divided into three sections: left, center, right.
         Your task is to identify the horizontal position of the bottle in the image, and respond with one of the following options: "left", "center", "right", or "" (if the bottle is not visible).
+        
+        position is relative to the tip of the robot gripper. 
         """
 
-        image_handle = lms.prepare_image("input.jpg")
+        image_handle = client.prepare_image("input.jpg")
         chat.add_user_message(prompt, images=[image_handle])
 
         result = model.respond(chat, response_format=PositionInfo)
@@ -164,7 +176,7 @@ class MoveBasedOnPosition(py_trees.behaviour.Behaviour):
 
         if position == "left":
             # Move right (positive x)
-            delta = Cartesian(10, 0, 0, 0, 0, 0)
+            delta = Cartesian(100, 0, 0, 0, 0, 0)
             ra.move_linear(
                 Cartesian(
                     ra.read_cartesian_pos().x + delta.x,
@@ -178,7 +190,7 @@ class MoveBasedOnPosition(py_trees.behaviour.Behaviour):
             self.feedback_message = "Moving right due to bottle on left"
         elif position == "right":
             # Move left (negative x)
-            delta = Cartesian(-10, 0, 0, 0, 0, 0)
+            delta = Cartesian(-100, 0, 0, 0, 0, 0)
             ra.move_linear(
                 Cartesian(
                     ra.read_cartesian_pos().x + delta.x,
