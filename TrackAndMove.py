@@ -65,7 +65,7 @@ class InitializeModel(py_trees.behaviour.Behaviour):
     def update(self):
         client = lms.Client("lablab.local:1234")
         self.blackboard.set(BB.CLIENT, client)
-        model = client.llm.model("internvl3_5-2b")
+        model = client.llm.model("internvl3_5-30b-a3b")
         # model = client.llm.model('lfm2-vl-1.6b')
         self.blackboard.set(BB.MODEL, model)
         self.feedback_message = "Model initialized successfully"

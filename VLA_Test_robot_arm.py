@@ -1,3 +1,4 @@
+import time
 import lmstudio as lms
 from pydantic import BaseModel, Field
 import cv2
@@ -32,7 +33,7 @@ class InitializeCamera(py_trees.behaviour.Behaviour):
         )
 
     def update(self):
-        cap = cv2.VideoCapture("/Users/kamholeung/Downloads/bottle.MOV")
+        cap = cv2.VideoCapture("/Users/ultra-studio/Downloads/bottle.MOV")
         if cap.isOpened():
             self.blackboard.set(BB.CAP, cap)
             self.blackboard.set(BB.FRAME_COUNT, 0)
@@ -52,7 +53,9 @@ class InitializeModel(py_trees.behaviour.Behaviour):
     def update(self):
         client = lms.Client("100.127.108.28:1234")
         self.blackboard.set(BB.CLIENT, client)
-        model = client.llm.model("internvl3_5-2b")
+        # model = client.llm.model("internvl3_5-8b")
+        # model = client.llm.model("internvl3_5-2b")
+        model = client.llm.model("internvl3_5-30b-a3b")
         self.blackboard.set(BB.MODEL, model)
         return Status.SUCCESS
 
@@ -150,8 +153,10 @@ class DetectBottlePosition(py_trees.behaviour.Behaviour):
 
         image_handle = client.prepare_image("input.jpg")
         chat.add_user_message(prompt, images=[image_handle])
-
+        start = time.time()
         result = model.respond(chat, response_format=PositionInfo)
+        end = time.time()
+        print(f"Detection Time: {end - start:.2f} seconds")
         print(result.parsed)
 
         self.blackboard.set(BB.POSITION, result.parsed.get("position"))
