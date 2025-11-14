@@ -72,7 +72,7 @@ class InitializeRobotArm(py_trees.behaviour.Behaviour):
 
     def update(self):
         ra = RobotArm("169.254.190.254")
-        ra.set_speed(0.4)
+        ra.set_speed(1.0)
         self.blackboard.set(BB.ROBOT_ARM, ra)
         return Status.SUCCESS
 
